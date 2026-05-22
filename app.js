@@ -493,13 +493,9 @@ function createDayCell(day, isOtherMonth, date, isToday = false) {
 
     cell.appendChild(dayEvents);
 
-    // Clique para criar agendamento
+    // Clique para mostrar popup do dia
     cell.addEventListener('click', () => {
-        if (isDateInPast(date)) {
-            showToast('warning', 'Atenção', 'Não é possível agendar no passado');
-            return;
-        }
-        openBookingModal(date);
+        showDayBookings(date);
     });
 
     return cell;
@@ -833,6 +829,67 @@ function getNextColor() {
     return EVENT_COLORS.reduce((a, b) => colorCounts[a] <= colorCounts[b] ? a : b);
 }
 
+// ============================================
+// POPUP AGENDAMENTOS DO DIA
+// ============================================
+function showDayBookings(date) {
+    const dateStr = formatDateISO(date);
+    const dayBookings = bookings
+        .filter(b => b.data === dateStr && b.status !== 'cancelado')
+        .sort((a, b) => timeToMinutes(a.horaInicio) - timeToMinutes(b.horaInicio));
+
+    const months = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+                    'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+    const weekdays = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+    const titleEl = document.getElementById('day-bookings-title');
+    titleEl.textContent = `${weekdays[date.getDay()]}, ${date.getDate()} de ${months[date.getMonth()]}`;
+
+    const container = document.getElementById('day-bookings-list');
+
+    if (dayBookings.length === 0) {
+        container.innerHTML = `
+            <div style="text-align:center;padding:40px 20px;color:var(--text-muted)">
+                <i class="fas fa-calendar-times" style="font-size:2.5rem;margin-bottom:12px;display:block;opacity:.4"></i>
+                <p>Nenhum agendamento neste dia</p>
+            </div>`;
+    } else {
+        container.innerHTML = dayBookings.map(b => `
+            <div class="booking-item" style="border-radius:0;border-bottom:1px solid var(--border);cursor:pointer"
+                 onclick="closeModal('day-bookings-modal'); setTimeout(()=>showBookingDetails(bookings.find(x=>x.id==='${b.id}')),150)">
+                <div class="booking-color" style="background:${COLOR_MAP[b.corEvento] || COLOR_MAP.blue};border-radius:0"></div>
+                <div class="booking-info" style="padding:14px 12px">
+                    <div class="booking-title" style="font-weight:600;margin-bottom:4px">${b.titulo}</div>
+                    <div class="booking-meta">
+                        <span><i class="fas fa-clock"></i> ${b.horaInicio} – ${b.horaFim}</span>
+                        <span><i class="fas fa-user"></i> ${b.solicitante}</span>
+                        <span><i class="fas fa-building"></i> ${b.setor}</span>
+                    </div>
+                </div>
+                <div style="padding-right:14px;display:flex;align-items:center;color:var(--text-muted)">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Botão "Novo Agendamento" — desabilitado se data passada
+    const newBtn = document.getElementById('day-bookings-new-btn');
+    if (isDateInPast(date)) {
+        newBtn.disabled = true;
+        newBtn.style.opacity = '0.4';
+        newBtn.onclick = null;
+    } else {
+        newBtn.disabled = false;
+        newBtn.style.opacity = '1';
+        newBtn.onclick = () => {
+            closeModal('day-bookings-modal');
+            openBookingModal(date);
+        };
+    }
+
+    document.getElementById('day-bookings-modal').classList.add('active');
+}
+
 async function deleteBooking(id) {
     if (!confirm('Tem certeza que deseja excluir este agendamento?')) return;
 
@@ -1000,7 +1057,7 @@ function updateSummaryCards() {
         })
         .sort((a, b) => {
             const dateA = new Date(a.data + 'T' + a.horaInicio);
-            const dateB = new Date(b.data + 'T' + b.horaFim);
+            const dateB = new Date(b.data + 'T' + b.horaInicio);
             return dateA - dateB;
         });
 
