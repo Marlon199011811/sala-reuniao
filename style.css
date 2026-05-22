@@ -705,6 +705,7 @@ body {
     font-weight: 700;
     color: var(--text-primary);
     line-height: 1.2;
+    display: block;
 }
 
 .stat-label {
@@ -713,6 +714,7 @@ body {
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    display: block;
 }
 
 /* ============================================
@@ -1493,21 +1495,33 @@ body {
    ============================================ */
 @media (min-width: 1024px) {
     .sidebar {
-        transform: translateX(0);
+        transform: translateX(-100%);
         position: fixed;
     }
 
+    body.sidebar-open .sidebar {
+        transform: translateX(0);
+    }
+
+    body.sidebar-open .main-content {
+        margin-left: var(--sidebar-width);
+    }
+
+    body.sidebar-open .app-header {
+        left: var(--sidebar-width);
+    }
+
     .menu-toggle {
-        display: none;
+        display: flex;
     }
 
     .main-content {
-        margin-left: var(--sidebar-width);
+        margin-left: 0;
         padding: calc(var(--header-height) + 24px) 28px 24px;
     }
 
     .app-header {
-        left: var(--sidebar-width);
+        left: 0;
     }
 
     .month-days {
