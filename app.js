@@ -1052,18 +1052,20 @@ function updateSummaryCards() {
 
     const statusEl = document.getElementById('stat-status');
     const statusCard = document.getElementById('card-status');
+    const statusIcon = statusCard.querySelector('.stat-icon');
+    const statusIconI = statusCard.querySelector('.stat-icon i');
     if (currentBooking) {
         statusEl.textContent = 'Ocupada';
         statusEl.style.color = 'var(--danger)';
-        statusCard.querySelector('.stat-icon').style.background = 'rgba(239, 68, 68, 0.15)';
-        statusCard.querySelector('.stat-icon').style.color = 'var(--danger)';
-        statusCard.querySelector('.stat-icon i').className = 'fas fa-door-closed';
+        statusIcon.style.background = 'rgba(239, 68, 68, 0.15)';
+        statusIcon.style.color = 'var(--danger)';
+        statusIconI.className = 'fas fa-door-closed';
     } else {
         statusEl.textContent = 'Livre';
         statusEl.style.color = 'var(--success)';
-        statusCard.querySelector('.stat-icon').style.background = 'rgba(16, 185, 129, 0.15)';
-        statusCard.querySelector('.stat-icon').style.color = 'var(--success)';
-        statusCard.querySelector('.stat-icon i').className = 'fas fa-door-open';
+        statusIcon.style.background = 'rgba(16, 185, 129, 0.15)';
+        statusIcon.style.color = 'var(--success)';
+        statusIconI.className = 'fas fa-door-open';
     }
 
     // Total do mês
