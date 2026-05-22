@@ -73,6 +73,7 @@ function initAuthState() {
             updateUserUI();
             document.getElementById('sidebar').classList.remove('active');
             document.getElementById('sidebar-overlay').classList.remove('active');
+            document.body.classList.remove('sidebar-open');
         } else {
             currentUser = null;
             userProfile = null;
@@ -269,8 +270,13 @@ function showMyBookings() {
 // SIDEBAR & UI
 // ============================================
 function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('active');
-    document.getElementById('sidebar-overlay').classList.toggle('active');
+    const isDesktop = window.innerWidth >= 1024;
+    if (isDesktop) {
+        document.body.classList.toggle('sidebar-open');
+    } else {
+        document.getElementById('sidebar').classList.toggle('active');
+        document.getElementById('sidebar-overlay').classList.toggle('active');
+    }
 }
 
 function toggleUserMenu() {
