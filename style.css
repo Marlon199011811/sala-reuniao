@@ -240,17 +240,19 @@ body {
 
 .toggle-password {
     position: absolute;
-    right: 14px;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 44px;
     background: none;
     border: none;
     color: var(--text-muted);
     cursor: pointer;
-    padding: 4px;
     font-size: 0.875rem;
-    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 1;
 }
 
 .input-group:has(.toggle-password) input {
