@@ -460,6 +460,27 @@
         </div>
     </div>
 
+    <!-- Modal: Agendamentos do Dia -->
+    <div class="modal" id="day-bookings-modal">
+        <div class="modal-overlay" onclick="closeModal('day-bookings-modal')"></div>
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h3><i class="fas fa-calendar-day"></i> <span id="day-bookings-title">Agendamentos</span></h3>
+                <button class="modal-close" onclick="closeModal('day-bookings-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="day-bookings-list" style="max-height:420px;overflow-y:auto;padding:0">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('day-bookings-modal')">Fechar</button>
+                <button class="btn btn-primary" id="day-bookings-new-btn" onclick="closeModal('day-bookings-modal')">
+                    <i class="fas fa-plus"></i> Novo Agendamento
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Container -->
     <div class="toast-container" id="toast-container"></div>
 
