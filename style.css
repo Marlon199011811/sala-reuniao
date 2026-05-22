@@ -247,6 +247,14 @@ body {
     cursor: pointer;
     padding: 4px;
     font-size: 0.875rem;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.input-group:has(.toggle-password) input {
+    padding-right: 44px;
 }
 
 .login-options {
