@@ -581,6 +581,26 @@ body {
     font-size: 1.5rem;
 }
 
+.sidebar-close-btn {
+    margin-left: auto;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+}
+
+.sidebar-close-btn:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
 .sidebar-nav {
     flex: 1;
     padding: 16px 12px;
