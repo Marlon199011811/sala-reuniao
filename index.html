@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sala de Reunião - Sistema de Agendamento</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Tela de Login -->
+    <div id="login-screen" class="screen active">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <div class="logo">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h1>Sala de Reunião</h1>
+                    <p>Sistema de Agendamento Inteligente</p>
+                </div>
+                <form id="login-form" class="login-form">
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="login-email" placeholder="E-mail" required autocomplete="email">
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="login-password" placeholder="Senha" required autocomplete="current-password">
+                        <button type="button" class="toggle-password" onclick="togglePassword('login-password', this)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="login-options">
+                        <label class="remember-me">
+                            <input type="checkbox" id="remember-me" checked>
+                            <span>Lembrar-me</span>
+                        </label>
+                        <a href="#" class="forgot-password" onclick="showForgotPassword()">Esqueceu a senha?</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">
+                        <i class="fas fa-sign-in-alt"></i> Entrar
+                    </button>
+                </form>
+                <div class="login-footer">
+                    <p>Não tem conta? <a href="#" onclick="showRegister()">Cadastre-se</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tela de Cadastro -->
+    <div id="register-screen" class="screen">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <div class="logo">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <h1>Criar Conta</h1>
+                    <p>Preencha seus dados para começar</p>
+                </div>
+                <form id="register-form" class="login-form">
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="reg-name" placeholder="Nome completo" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="reg-email" placeholder="E-mail corporativo" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-building"></i>
+                        <input type="text" id="reg-department" placeholder="Departamento/Setor" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="reg-password" placeholder="Senha (mín. 6 caracteres)" required minlength="6">
+                        <button type="button" class="toggle-password" onclick="togglePassword('reg-password', this)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="reg-password-confirm" placeholder="Confirmar senha" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">
+                        <i class="fas fa-user-plus"></i> Criar Conta
+                    </button>
+                </form>
+                <div class="login-footer">
+                    <p>Já tem conta? <a href="#" onclick="showLogin()">Fazer login</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tela de Recuperação de Senha -->
+    <div id="forgot-screen" class="screen">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <div class="logo">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <h1>Recuperar Senha</h1>
+                    <p>Envie um link de redefinição para seu e-mail</p>
+                </div>
+                <form id="forgot-form" class="login-form">
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="forgot-email" placeholder="Seu e-mail cadastrado" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">
+                        <i class="fas fa-paper-plane"></i> Enviar Link
+                    </button>
+                </form>
+                <div class="login-footer">
+                    <p><a href="#" onclick="showLogin()">Voltar ao login</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Principal -->
+    <div id="dashboard-screen" class="screen">
+        <!-- Header Mobile -->
+        <header class="app-header">
+            <button class="menu-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="header-brand">
+                <i class="fas fa-calendar-check"></i>
+                <span>Sala de Reunião</span>
+            </div>
+            <div class="header-actions">
+                <button class="btn-icon" onclick="toggleTheme()" title="Alternar tema">
+                    <i class="fas fa-moon" id="theme-icon"></i>
+                </button>
+                <div class="user-menu">
+                    <button class="user-avatar" onclick="toggleUserMenu()">
+                        <span id="user-initials">U</span>
+                    </button>
+                    <div class="user-dropdown" id="user-dropdown">
+                        <div class="user-info">
+                            <span id="user-name">Usuário</span>
+                            <span id="user-role" class="role-badge">Usuário</span>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" onclick="showReports()" id="menu-reports" style="display:none">
+                            <i class="fas fa-chart-bar"></i> Relatórios
+                        </a>
+                        <a href="#" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Sair
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-calendar-check"></i>
+                <span>Sala de Reunião</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" onclick="setView('month')">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Calendário</span>
+                </a>
+                <a href="#" class="nav-item" onclick="showFilters()">
+                    <i class="fas fa-filter"></i>
+                    <span>Filtros</span>
+                </a>
+                <a href="#" class="nav-item" onclick="showMyBookings()">
+                    <i class="fas fa-list"></i>
+                    <span>Meus Agendamentos</span>
+                </a>
+                <a href="#" class="nav-item" onclick="showReports()" id="sidebar-reports" style="display:none">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Relatórios</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="btn btn-primary btn-full" onclick="openBookingModal()">
+                    <i class="fas fa-plus"></i> Novo Agendamento
+                </button>
+            </div>
+        </aside>
+
+        <!-- Overlay para mobile -->
+        <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            <!-- Cards de Resumo -->
+            <div class="summary-cards">
+                <div class="card stat-card" id="card-today">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-today">0</span>
+                        <span class="stat-label">Hoje</span>
+                    </div>
+                </div>
+                <div class="card stat-card" id="card-next">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-next">--:--</span>
+                        <span class="stat-label">Próxima</span>
+                    </div>
+                </div>
+                <div class="card stat-card" id="card-status">
+                    <div class="stat-icon">
+                        <i class="fas fa-door-open"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-status">Livre</span>
+                        <span class="stat-label">Status</span>
+                    </div>
+                </div>
+                <div class="card stat-card" id="card-month">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-month">0</span>
+                        <span class="stat-label">Este Mês</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendário -->
+            <div class="calendar-container card">
+                <div class="calendar-header">
+                    <div class="calendar-nav">
+                        <button class="btn btn-outline" onclick="navigateCalendar(-1)">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="btn btn-outline" onclick="goToToday()">Hoje</button>
+                        <button class="btn btn-outline" onclick="navigateCalendar(1)">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <h2 class="calendar-title" id="calendar-title">Maio 2026</h2>
+                    <div class="calendar-views">
+                        <button class="view-btn" data-view="day" onclick="setView('day')">Dia</button>
+                        <button class="view-btn" data-view="week" onclick="setView('week')">Semana</button>
+                        <button class="view-btn active" data-view="month" onclick="setView('month')">Mês</button>
+                    </div>
+                </div>
+
+                <!-- View: Mês -->
+                <div id="month-view" class="calendar-view active">
+                    <div class="month-grid">
+                        <div class="weekday-header">Dom</div>
+                        <div class="weekday-header">Seg</div>
+                        <div class="weekday-header">Ter</div>
+                        <div class="weekday-header">Qua</div>
+                        <div class="weekday-header">Qui</div>
+                        <div class="weekday-header">Sex</div>
+                        <div class="weekday-header">Sáb</div>
+                    </div>
+                    <div class="month-days" id="month-days"></div>
+                </div>
+
+                <!-- View: Semana -->
+                <div id="week-view" class="calendar-view">
+                    <div class="week-grid" id="week-grid"></div>
+                </div>
+
+                <!-- View: Dia -->
+                <div id="day-view" class="calendar-view">
+                    <div class="day-grid" id="day-grid"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: Novo/Editar Agendamento -->
+    <div class="modal" id="booking-modal">
+        <div class="modal-overlay" onclick="closeModal('booking-modal')"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="booking-modal-title"><i class="fas fa-calendar-plus"></i> Novo Agendamento</h3>
+                <button class="modal-close" onclick="closeModal('booking-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="booking-form" class="modal-body">
+                <input type="hidden" id="booking-id">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Solicitante *</label>
+                        <input type="text" id="booking-requester" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-building"></i> Departamento *</label>
+                        <input type="text" id="booking-department" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-heading"></i> Título da Reunião *</label>
+                    <input type="text" id="booking-title" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-align-left"></i> Descrição</label>
+                    <textarea id="booking-description" rows="3"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar"></i> Data *</label>
+                        <input type="date" id="booking-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-users"></i> Participantes *</label>
+                        <input type="number" id="booking-participants" min="1" max="50" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-clock"></i> Início *</label>
+                        <input type="time" id="booking-start" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-clock"></i> Término *</label>
+                        <input type="time" id="booking-end" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-sticky-note"></i> Observações</label>
+                    <textarea id="booking-notes" rows="2"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('booking-modal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Salvar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Detalhes do Agendamento -->
+    <div class="modal" id="details-modal">
+        <div class="modal-overlay" onclick="closeModal('details-modal')"></div>
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h3><i class="fas fa-info-circle"></i> Detalhes do Agendamento</h3>
+                <button class="modal-close" onclick="closeModal('details-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="details-content">
+                <!-- Preenchido dinamicamente -->
+            </div>
+            <div class="modal-footer" id="details-footer">
+                <!-- Preenchido dinamicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Filtros -->
+    <div class="modal" id="filters-modal">
+        <div class="modal-overlay" onclick="closeModal('filters-modal')"></div>
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h3><i class="fas fa-filter"></i> Filtros</h3>
+                <button class="modal-close" onclick="closeModal('filters-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label><i class="fas fa-calendar"></i> Data</label>
+                    <input type="date" id="filter-date">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Solicitante</label>
+                    <input type="text" id="filter-requester" placeholder="Nome do solicitante">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-building"></i> Setor</label>
+                    <input type="text" id="filter-department" placeholder="Departamento">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-tag"></i> Status</label>
+                    <select id="filter-status">
+                        <option value="">Todos</option>
+                        <option value="ativo">Ativo</option>
+                        <option value="cancelado">Cancelado</option>
+                        <option value="concluido">Concluído</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="clearFilters()">Limpar</button>
+                <button class="btn btn-primary" onclick="applyFilters()">
+                    <i class="fas fa-search"></i> Aplicar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Relatórios -->
+    <div class="modal" id="reports-modal">
+        <div class="modal-overlay" onclick="closeModal('reports-modal')"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-chart-bar"></i> Relatórios</h3>
+                <button class="modal-close" onclick="closeModal('reports-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Data Inicial</label>
+                        <input type="date" id="report-start">
+                    </div>
+                    <div class="form-group">
+                        <label>Data Final</label>
+                        <input type="date" id="report-end">
+                    </div>
+                </div>
+                <div class="reports-list" id="reports-list"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="generateReport()">
+                    <i class="fas fa-sync"></i> Atualizar
+                </button>
+                <button class="btn btn-success" onclick="exportPDF()">
+                    <i class="fas fa-file-pdf"></i> PDF
+                </button>
+                <button class="btn btn-success" onclick="exportExcel()">
+                    <i class="fas fa-file-excel"></i> Excel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Meus Agendamentos -->
+    <div class="modal" id="my-bookings-modal">
+        <div class="modal-overlay" onclick="closeModal('my-bookings-modal')"></div>
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3><i class="fas fa-list"></i> Meus Agendamentos</h3>
+                <button class="modal-close" onclick="closeModal('my-bookings-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="bookings-list" id="my-bookings-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner">
+            <i class="fas fa-circle-notch fa-spin"></i>
+            <span>Carregando...</span>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
