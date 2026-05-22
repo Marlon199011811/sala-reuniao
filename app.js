@@ -71,6 +71,8 @@ function initAuthState() {
             showScreen('dashboard-screen');
             startRealtimeSync();
             updateUserUI();
+            document.getElementById('sidebar').classList.remove('active');
+            document.getElementById('sidebar-overlay').classList.remove('active');
         } else {
             currentUser = null;
             userProfile = null;
@@ -343,28 +345,18 @@ function stopRealtimeSync() {
 // CALENDÁRIO
 // ============================================
 function setView(view) {
-    currentView = view;
-
-    // Atualizar botões
+    currentView = 'month';
     document.querySelectorAll('.view-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.view === view);
+        btn.classList.toggle('active', btn.dataset.view === 'month');
     });
-
-    // Mostrar view correta
     document.querySelectorAll('.calendar-view').forEach(v => v.classList.remove('active'));
-    document.getElementById(view + '-view').classList.add('active');
-
+    const mv = document.getElementById('month-view');
+    if (mv) mv.classList.add('active');
     renderCalendar();
 }
 
 function navigateCalendar(direction) {
-    if (currentView === 'month') {
-        currentDate.setMonth(currentDate.getMonth() + direction);
-    } else if (currentView === 'week') {
-        currentDate.setDate(currentDate.getDate() + (direction * 7));
-    } else {
-        currentDate.setDate(currentDate.getDate() + direction);
-    }
+    currentDate.setMonth(currentDate.getMonth() + direction);
     renderCalendar();
 }
 
@@ -375,32 +367,13 @@ function goToToday() {
 
 function renderCalendar() {
     updateCalendarTitle();
-
-    if (currentView === 'month') {
-        renderMonthView();
-    } else if (currentView === 'week') {
-        renderWeekView();
-    } else {
-        renderDayView();
-    }
+    renderMonthView();
 }
 
 function updateCalendarTitle() {
     const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
                     'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
-
-    let title = '';
-    if (currentView === 'month') {
-        title = `${months[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
-    } else if (currentView === 'week') {
-        const start = getWeekStart(currentDate);
-        const end = new Date(start);
-        end.setDate(end.getDate() + 6);
-        title = `${start.getDate()} - ${end.getDate()} ${months[end.getMonth()]} ${end.getFullYear()}`;
-    } else {
-        title = `${currentDate.getDate()} ${months[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
-    }
-
+    const title = `${months[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
     document.getElementById('calendar-title').textContent = title;
 }
 
